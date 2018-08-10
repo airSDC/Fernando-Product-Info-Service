@@ -107,8 +107,8 @@ const populateRandomAmenities = num => {
   return newAmenity;
 };
 
-const createAmenities = (start, end) => {
-  const CSV = fs.createWriteStream(`./${start}_amenities.csv`); 
+const createAmenities = (start, end, counter = 1) => {
+  const CSV = fs.createWriteStream(`./CSV/${start}_amenities.csv`); 
   for (start; start < end; start++) { 
     const amenities = populateRandomAmenities(faker.random.number({ min: 4, max: 7 }));
     for (let i = 0; i < amenities.length; i++) {
@@ -117,10 +117,13 @@ const createAmenities = (start, end) => {
       for (let key in amenities[i]) {
         amenityRow += `${amenities[i][key]},`
       }
-      CSV.write(`${amenityRow}\n`);
+      CSV.write(`${counter},${amenityRow.slice(0,amenityRow.length-1)}\n`);
+      counter++;
     }
   }
+  return counter;
 };
+
 
 const createRoom = (start, end) => {
   const out = fs.createWriteStream(`./${start}.csv`);  
