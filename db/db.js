@@ -18,4 +18,3 @@ loadCSV = (tableName, path, CSVfile) => {
     }
   );
 };
-

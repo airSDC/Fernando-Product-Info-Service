@@ -126,41 +126,42 @@ const createAmenities = (start, end, counter = 1) => {
 
 
 const createRoom = (start, end) => {
-  const out = fs.createWriteStream(`./${start}.csv`);  
+  const file = fs.createWriteStream(`./${start}.csv`);  
   let room = end - start;
   while (room--) {
     const sentenceLength = faker.random.number({ min: 1, max: 3 });
-    let sentence = `${start},`;
-    sentence += `room${start},`;
-    sentence += `${faker.address.city()},`;
-    sentence += `${PROPERTY_TYPE[Math.floor(Math.random() * PROPERTY_TYPE.length)]},`;
-    sentence += `${ faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
-    sentence += `${faker.random.number({ min: 1, max: 4 })},`;
-    sentence += `${faker.random.number({ min: 1, max: 4 })},`;
-    sentence += `${faker.random.number({ min: 1, max: 4 })},`;
-    sentence += `${faker.random.number({ min: 1, max: 4 })},`;
-    sentence += `${faker.name.findName()},`;
-    sentence += `${faker.image.avatar()},`;
-    sentence += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
-    sentence += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
-    sentence += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
-    sentence += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))}* ${faker.lorem.sentences(faker.random.number({ min: 2, max: 5 }))},`;
+    const id = `${start},`;
+    const name = `room${start},`;
+    const city = `${faker.address.city()},`;
+    const type = `${PROPERTY_TYPE[Math.floor(Math.random() * PROPERTY_TYPE.length)]},`;
+    const title = `${ faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
+    const max_guest = `${faker.random.number({ min: 1, max: 4 })},`;
+    const subtype =  `${faker.random.number({ min: 1, max: 4 })},`;
+    const numBeds = `${faker.random.number({ min: 1, max: 4 })},`;
+    const numBaths = `${faker.random.number({ min: 1, max: 4 })},`;
+    const host = `${faker.name.findName()},`;
+    const avatar = `${faker.image.avatar()},`;
+    const short_desc = `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
+    const main_desc = `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
+    const house_rules_desc = `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))},`;
+    const highlights = `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))}* ${faker.lorem.sentences(faker.random.number({ min: 2, max: 5 }))},`;
  
     const noOfRules = faker.random.number({ min: 1, max: 3 });
     let rules = '';
     for (let j = 0; j < noOfRules; j++) {
       rules += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))}* `;
     }
-    sentence += `${rules},`;
+    const house_rules = `${rules},`;
 
     const cancellationsLength = faker.random.number({ min: 1, max: 3 });
     let cancelationRules = '';
     for (let j = 0; j < cancellationsLength; j++) {
       cancelationRules += `${faker.lorem.sentences(faker.random.number({ min: 1, max: 3 }))}* `;
     }
-    sentence += `${cancelationRules},`;
+    const cancellations = `${cancelationRules},`;
 
     let beds = faker.random.number({ min: 1, max: 4 });
+    let sleeping_arrange = '';
     for (let x = 0; x < beds; x++) {
       let bedDetails = '';
       const noOfBed = faker.random.number({ min: 1, max: 2 });
@@ -170,9 +171,10 @@ const createRoom = (start, end) => {
       } else {
         bedDetails = `${noOfBed} ${typeOfBEd} ` + 'beds';
       }
-      sentence += `${bedDetails}* `;
+      sleeping_arrange += `${bedDetails}* `;
     }
     start++
-    out.write(`${sentence}\n`);
+    const CSV = `${id}${name}${city}${type}${title}${max_guest}${subtype}${numBeds}${numBaths}${host}${avatar}${short_desc}${main_desc}${house_rules_desc}${highlights}${house_rules}${cancellations}${sleeping_arrange}\n`;
+    file.write(CSV);
   }
 };
