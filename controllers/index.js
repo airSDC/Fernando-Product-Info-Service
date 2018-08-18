@@ -1,42 +1,40 @@
-/* 
+/*
 func (req, res) {
 
 }
 */
-const db = require("../models");
+const pool = require("../models/index.js");
 
 const getRoom = (roomId, callback) => {
-  let query = db.Room.findOne({ room_id: roomId });
-  query.exec((err, room) => {
+  const query = {
+    text:
+      "SELECT roominfo.*, ((SELECT ARRAY_AGG('[' || amenitytype || ',' || name || ',' || COALESCE(icon, '0') || ',' || COALESCE(explanation, '0') || ']') AS explanation FROM amenities WHERE roominfo.id = amenities.room_id)) FROM roominfo WHERE roominfo.id = $1;",
+    values: [roomId]
+  };
+  pool.query(query, (err, res) => {
     if (err) {
-      console.log("error in getting room: ", err);
-      callback(err);
+      console.log(err);
     }
-    callback(null, room);
+    callback(res.rows);
   });
 };
 
-const createRoom = (roomInfo, callback) => { 
+const createRoom = (roomInfo, callback) => {
   const room = new db.Room(roomInfo);
   room.save(callback);
-}
+};
 
 const updateRoom = (newRoom, id, callback) => {
-  db.Room.findByIdAndUpdate(
-    id, 
-    newRoom, 
-    {new: true},
-    callback
-  );
+  db.Room.findByIdAndUpdate(id, newRoom, { new: true }, callback);
 };
 
 const deleteRoom = (id, callback) => {
   db.Room.findByIdAndRemove(id, callback);
 };
 
-module.exports = { 
+module.exports = {
   getRoom,
   createRoom,
   updateRoom,
-  deleteRoom,
+  deleteRoom
 };

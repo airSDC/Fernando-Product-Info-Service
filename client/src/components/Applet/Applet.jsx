@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import Summary from './../Summary/Summary.js';
-import Highlights from './../Highlights/Highlights.js';
-import Details from './../Details/Details.js';
-import Sleeping from './../Sleeping Arrangments/Sleeping.js';
-import Rules from './../Rules/Rules.js';
-import Cancellation from './../Cancellations/Cancellation.js';
-import Amenities from './../Amenities/Amenities.js';
-
+import React, { Component } from "react";
+import Summary from "./../Summary/Summary.js";
+import Highlights from "./../Highlights/Highlights.js";
+import Details from "./../Details/Details.js";
+import Sleeping from "./../Sleeping Arrangments/Sleeping.js";
+import Rules from "./../Rules/Rules.js";
+import Cancellation from "./../Cancellations/Cancellation.js";
+import Amenities from "./../Amenities/Amenities.js";
 
 class Applet extends Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class Applet extends Component {
       room: {}
     };
 
-    console.log('applet', this.state.room);
+    console.log("applet", this.state.room);
   }
 
   // componentDidMount() {
@@ -39,18 +38,23 @@ class Applet extends Component {
   }
 
   getData() {
-    const id = parseInt(window.location.pathname.split('/').pop());
+    const id = parseInt(window.location.pathname.split("/").pop());
     const self = this;
     fetch(`/api/rooms/${id}`)
       .then(response => response.json())
-      .then(data => this.setState({ room: data }, console.log('data from server', data)))
+      .then(data => {
+        this.setState(
+          { room: data[0] },
+          console.log("data from server", data[0])
+        );
+      })
       .catch(() => {
-        console.log("error")});
+        console.log("error");
+      });
   }
 
   render() {
-
-    console.log(this.state.room)
+    console.log(this.state.room);
     return (
       <div>
         <Summary className="summary section" room={this.state.room} />
