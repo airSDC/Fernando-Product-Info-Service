@@ -2,20 +2,30 @@ const app = require("express");
 const ctrl = require("./../controllers");
 const router = app.Router();
 const bodyParser = require("body-parser");
-
+const redis = require("redis");
+const redisClient = redis.createClient();
 const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 // router.get('/', ctrl.main.home);
 
-router.get("/rooms/:id", (req, res) => {
-  console.log("here inside routes/index", req.params.id);
-  ctrl.getRoom(req.params.id, (err, data) => {
-    if (err) {
-      res.status(404).send(err);
+const getCache = (req, res) => {
+  let isbn = req.params.id;
+  redisClient.get(isbn, (err, result) => {
+    if (result) {
+      res.send(result);
+    } else {
+      ctrl.getRoom(req.params.id, (err, data) => {
+        if (err) {
+          console.log("I got an error", err);
+          res.status(404).send(err);
+        }
+        res.json(data);
+      });
     }
-    res.json(data);
   });
-});
+};
+
+router.get("/rooms/:id/roominfo", getCache);
 
 router.post("/rooms/:id", (req, res) => {
   console.log("POST got triggered");
