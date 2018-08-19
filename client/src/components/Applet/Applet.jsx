@@ -40,7 +40,7 @@ class Applet extends Component {
   getData() {
     const id = parseInt(window.location.pathname.split("/").pop());
     const self = this;
-    fetch(`/api/rooms/${id}`)
+    fetch(`/api/rooms/${id}/roominfo`)
       .then(response => response.json())
       .then(data => {
         this.setState(
