@@ -29,7 +29,7 @@ CREATE TABLE roominfo (
 
 CREATE TABLE amenities (
   id INTEGER,
-  room_id  VARCHAR (255),
+  room_id  INTEGER,
   amenitytype VARCHAR (255),
   name VARCHAR (255),
   icon VARCHAR (800),
